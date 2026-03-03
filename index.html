@@ -15,14 +15,15 @@
             margin: 0;
             padding: 0;
             width: 100%;
-            height: 100%;
-            overflow: hidden;
+            min-height: 100%;
+            /* Убираем жесткий hidden, чтобы можно было скроллить на мобилках */
+            overflow-x: hidden;
             background: var(--bg);
             font-family: 'Segoe UI', Roboto, sans-serif;
         }
 
         #particles-js {
-            position: absolute;
+            position: fixed; /* Фиксируем фон */
             width: 100%;
             height: 100%;
             z-index: 1;
@@ -35,7 +36,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
+            padding: 40px 20px 120px; /* Больше отступа снизу для мобильного футера */
+            box-sizing: border-box;
             text-align: center;
             color: white;
             background: radial-gradient(circle at center, rgba(0, 242, 255, 0.05) 0%, transparent 70%);
@@ -43,20 +46,20 @@
 
         .logo-box {
             position: relative;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             animation: float 6s ease-in-out infinite;
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+            50% { transform: translateY(-15px); }
         }
 
         .title {
-            font-size: 5rem;
+            font-size: clamp(2.5rem, 8vw, 5rem); /* Гибкий размер шрифта */
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 10px;
+            letter-spacing: clamp(4px, 2vw, 10px);
             margin: 0;
             background: linear-gradient(to bottom, #fff 30%, var(--primary));
             -webkit-background-clip: text;
@@ -65,103 +68,88 @@
         }
 
         .subtitle {
-            font-size: 1.5rem;
+            font-size: clamp(0.9rem, 3vw, 1.5rem);
             color: var(--primary);
-            letter-spacing: 5px;
-            margin-bottom: 40px;
+            letter-spacing: clamp(2px, 1vw, 5px);
+            margin-bottom: 30px;
             opacity: 0.8;
             text-transform: uppercase;
         }
 
         .description {
             max-width: 600px;
-            line-height: 1.8;
-            margin-bottom: 50px;
-            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
             color: #a0adba;
-            padding: 0 20px;
+            padding: 0;
         }
 
         .btn-glitch {
             position: relative;
-            padding: 20px 50px;
-            font-size: 1.2rem;
+            padding: 18px 40px;
+            font-size: 1.1rem;
             font-weight: bold;
             color: white;
             text-transform: uppercase;
             text-decoration: none;
             background: linear-gradient(45deg, var(--secondary), var(--primary));
-            border-radius: 5px;
+            border-radius: 8px;
             transition: 0.3s;
             overflow: hidden;
             border: none;
             cursor: pointer;
             box-shadow: 0 0 20px rgba(0, 98, 255, 0.4);
+            display: inline-block;
         }
 
-        .btn-glitch:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 40px rgba(0, 242, 255, 0.6);
-        }
-
-        .btn-glitch::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: 0.5s;
-        }
-
-        .btn-glitch:hover::before {
-            left: 100%;
-        }
+        .btn-glitch:active { transform: scale(0.95); } /* Эффект нажатия на тачскрине */
 
         .footer {
-            position: absolute;
-            bottom: 30px;
+            position: relative; /* Относительное позиционирование для мобильных */
+            margin-top: 50px;
             z-index: 2;
             width: 100%;
             display: flex;
+            flex-wrap: wrap; /* Чтобы ссылки переносились на вторую строку */
             justify-content: center;
-            gap: 30px;
+            gap: 15px 30px;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         .footer a {
             color: #50667a;
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: 0.3s;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
         }
 
-        .footer a:hover {
-            color: var(--primary);
-            text-shadow: 0 0 10px var(--primary);
-        }
+        .footer a:hover { color: var(--primary); }
 
-        /* Анимированная шестеренка в углу */
         .corner-gear {
-            position: absolute;
-            width: 300px;
-            height: 300px;
+            position: fixed;
+            width: 200px;
+            height: 200px;
             background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%2300f2ff" opacity="0.05" d="M50 5l-5 5v10l5 5 5-5V10zM50 80l-5 5v10l5 5 5-5V85zM20 50l-5-5H5l-5 5 5 5h10zM80 50l-5-5h-10l-5 5 5 5h10z"/></svg>');
             background-size: contain;
             animation: rotate 20s linear infinite;
             z-index: 0;
+            pointer-events: none; /* Чтобы шестеренки не мешали нажимать на кнопки */
         }
-        
+
         @keyframes rotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
 
+        /* Планшеты и телефоны */
         @media (max-width: 768px) {
-            .title { font-size: 2.5rem; letter-spacing: 5px; }
-            .subtitle { font-size: 1rem; }
+            .main-container { justify-content: flex-start; padding-top: 10vh; }
+            .corner-gear { width: 150px; height: 150px; }
+            .footer { position: relative; bottom: 0; }
         }
     </style>
 </head>
@@ -169,29 +157,29 @@
 
     <div id="particles-js"></div>
     
-    <div class="corner-gear" style="top: -100px; right: -100px;"></div>
-    <div class="corner-gear" style="bottom: -150px; left: -150px; animation-direction: reverse;"></div>
+    <div class="corner-gear" style="top: -50px; right: -50px;"></div>
+    <div class="corner-gear" style="bottom: -80px; left: -80px; animation-direction: reverse;"></div>
 
     <div class="main-container">
         <div class="logo-box">
             <h1 class="title">VUE GAMES</h1>
-            <div class="subtitle">The beginning of our story begins right now!</div>
+            <div class="subtitle">The story begins right now</div>
         </div>
 
         <p class="description">
-            Our first game is called Screw Puzzle: Offline Games. <br>
-            Immerse yourself in a fun nut and bolt sorting game designed for your convenience. We value your time, so we've created a game where the focus remains solely on the puzzle, wood, and metal. Enjoy a focused puzzle experience.
+            Our first game is <strong>Screw Puzzle: Offline Games</strong>. <br><br>
+            Immerse yourself in a fun nut and bolt sorting game. Enjoy a focused puzzle experience with wood and metal.
         </p>
 
         <a href="https://play.google.com/store/apps/details?id=com.vuegames.screwbust" class="btn-glitch">
-            Download in Google Play
+            Google Play
         </a>
 
         <div class="footer">
-            <a href="https://doc-hosting.flycricket.io/screw-bust-sort-jam-puzzle-privacy-policy/1df8fbe3-a114-4fc4-a13f-ebced46539e8/privacy">Privacy Policy</a>
-            <a href="app-ads.txt">AdMob Ads.txt</a>
-            <a href="https://doc-hosting.flycricket.io/screw-puzzle-no-forced-ads-terms-of-use/c7cc1a60-adbe-429e-b328-4cf38ec2049e/terms">Terms of Use</a>
-            <span style="color: #304152;">&copy; 2026 VUE GAMES</span>
+            <a href="https://doc-hosting.flycricket.io/screw-bust-sort-jam-puzzle-privacy-policy/1df8fbe3-a114-4fc4-a13f-ebced46539e8/privacy">Privacy</a>
+            <a href="app-ads.txt">Ads.txt</a>
+            <a href="https://doc-hosting.flycricket.io/screw-puzzle-no-forced-ads-terms-of-use/c7cc1a60-adbe-429e-b328-4cf38ec2049e/terms">Terms</a>
+            <span style="color: #304152; width: 100%; display: block;">&copy; 2026 VUE GAMES</span>
         </div>
     </div>
 
@@ -199,7 +187,7 @@
     <script>
         particlesJS('particles-js', {
             "particles": {
-                "number": { "value": 80 },
+                "number": { "value": 40 }, /* Уменьшил число для мобильной производительности */
                 "color": { "value": "#00f2ff" },
                 "shape": { "type": "circle" },
                 "opacity": { "value": 0.5 },
@@ -213,18 +201,14 @@
                 },
                 "move": {
                     "enable": true,
-                    "speed": 2,
-                    "direction": "none",
-                    "random": false,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false,
+                    "speed": 1.5,
+                    "out_mode": "out"
                 }
             },
             "interactivity": {
                 "detect_on": "canvas",
                 "events": {
-                    "onhover": { "enable": true, "mode": "grab" },
+                    "onhover": { "enable": false }, /* Отключил наведение, на мобилках оно глючит */
                     "onclick": { "enable": true, "mode": "push" },
                     "resize": true
                 }
